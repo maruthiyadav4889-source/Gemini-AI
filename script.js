@@ -8,7 +8,6 @@ const modelBadge = document.querySelector('.model-badge');
 
 // Retrieve stored Gemini API Key
 let apiKey = localStorage.getItem('GEMINI_API_KEY') || '';
-let currentActiveModel = null;
 
 // API Key Setup Prompt
 apiKeyBtn.addEventListener('click', () => {
@@ -17,13 +16,7 @@ apiKeyBtn.addEventListener('click', () => {
   if (input !== null) {
     apiKey = input.trim();
     localStorage.setItem('GEMINI_API_KEY', apiKey);
-    currentActiveModel = null; // reset cached model
-    if (apiKey) {
-      alert("API Key saved. Discovering latest active model...");
-      detectAndSetModel();
-    } else {
-      alert("API Key cleared.");
-    }
+    alert(apiKey ? "API Key connected successfully." : "API Key cleared.");
   }
 });
 
@@ -42,53 +35,14 @@ document.querySelectorAll('.suggestion-card').forEach(card => {
   });
 });
 
-// --- DYNAMIC MODEL AUTO-DETECTION ---
-async function detectAndSetModel() {
-  if (!apiKey) return "models/gemini-2.5-flash";
-  if (currentActiveModel) return currentActiveModel;
-
-  try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-    const data = await response.json();
-
-    if (data.models && data.models.length > 0) {
-      // Find models supporting generateContent
-      const usable = data.models.filter(m => 
-        m.supportedGenerationMethods && 
-        m.supportedGenerationMethods.includes('generateContent')
-      );
-
-      // Prefer latest flash models, then any available gemini model
-      const preferred = usable.find(m => m.name.includes('2.5-flash')) ||
-                        usable.find(m => m.name.includes('flash')) ||
-                        usable.find(m => m.name.includes('gemini')) ||
-                        usable[0];
-
-      if (preferred) {
-        currentActiveModel = preferred.name; // Format: "models/gemini-..."
-        if (modelBadge) {
-          modelBadge.textContent = preferred.name.replace('models/', '');
-        }
-        return currentActiveModel;
-      }
-    }
-  } catch (err) {
-    console.warn("Could not list models automatically:", err);
-  }
-
-  // Safe fallback
-  currentActiveModel = "models/gemini-2.5-flash";
-  return currentActiveModel;
-}
-
-// --- GOOGLE GEMINI API CALL ---
+// --- GOOGLE GEMINI 3.6 FLASH API ENGINE ---
 async function fetchGeminiResponse(prompt) {
   if (!apiKey) {
     return "Please set your Gemini API Key by tapping the gear icon (⚙️) at the top right. You can obtain one for free at [Google AI Studio](https://aistudio.google.com/app/apikey).";
   }
 
-  const model = await detectAndSetModel();
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/${model}:generateContent?key=${apiKey}`;
+  // Active Gemini 3.6 Flash Endpoint
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
 
   const requestBody = {
     contents: [
@@ -138,7 +92,7 @@ function speakText(text) {
   }
 }
 
-// --- SPEECH RECOGNITION ---
+// --- SPEECH RECOGNITION (Microphone) ---
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition = null;
 let isListening = false;
@@ -248,6 +202,3 @@ userInput.addEventListener('keydown', (e) => {
     handleSend();
   }
 });
-
-// Run initial detection if key is already present
-if (apiKey) detectAndSetModel();
