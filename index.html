@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Gemini</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Markdown & Syntax Highlighter -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="gemini-header">
+    <div class="logo-group">
+      <svg class="sparkle-icon" viewBox="0 0 24 24">
+        <defs>
+          <linearGradient id="gemini-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4285f4"/>
+            <stop offset="50%" stop-color="#9b72cb"/>
+            <stop offset="100%" stop-color="#d96570"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#gemini-grad)" d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/>
+      </svg>
+      <span class="app-name">Gemini</span>
+      <span class="model-badge">2.0 Flash</span>
+    </div>
+    
+    <button class="settings-btn" id="apiKeyBtn" title="Set Gemini API Key">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Main Chat & Suggestions Feed -->
+  <main class="chat-feed" id="chatFeed">
+    
+    <!-- Welcome Greeting Container -->
+    <div class="welcome-container" id="welcomeContainer">
+      <div class="greeting">
+        <span class="gradient-text">Hello, Boss</span>
+        <h2>How can I help you today?</h2>
+      </div>
+
+      <div class="suggestions-grid">
+        <div class="suggestion-card" data-prompt="Solve this math assignment step-by-step: 3x^2 + 6x - 9 = 0">
+          <span class="card-icon">📐</span>
+          <p>Solve assignment with steps</p>
+        </div>
+        <div class="suggestion-card" data-prompt="Write a Python program to sort a list and explain time complexity">
+          <span class="card-icon">💻</span>
+          <p>Write & debug code</p>
+        </div>
+        <div class="suggestion-card" data-prompt="Explain the laws of Thermodynamics in simple points">
+          <span class="card-icon">⚡</span>
+          <p>Explain science concepts</p>
+        </div>
+        <div class="suggestion-card" data-prompt="Summarize the key events of World War II in 5 bullets">
+          <span class="card-icon">📝</span>
+          <p>Summarize notes & essays</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Input Dock -->
+  <footer class="input-dock">
+    <div class="input-card">
+      <textarea id="userInput" class="chat-textarea" placeholder="Ask Gemini..." rows="1"></textarea>
+      
+      <div class="input-actions">
+        <button class="action-btn" id="micBtn" title="Voice Input">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+          </svg>
+        </button>
+        
+        <button class="action-btn send-btn" id="sendBtn" title="Submit Directive">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="disclaimer">Gemini may display inaccurate info, so double-check its responses.</div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
